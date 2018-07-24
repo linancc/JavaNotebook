@@ -5,7 +5,7 @@ Classpath 【.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar; 】
 
 ### DAY03
 
-![1531362230590](C:\Users\linan\OneDrive\文档\MarkDown笔记\images\1531362230590.png)
+![1531362230590](C:\Users\linan\Documents\GitHub\Java\images\1531362230590.png)
 
 - 变量定义 
 1. 先声明，后赋值

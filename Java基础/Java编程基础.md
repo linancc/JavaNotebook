@@ -5,7 +5,7 @@
 
 ### DAY03
 
-![1531362230590](C:\Users\linan\Documents\GitHub\Java\Java基础\images\1531362230590.png)
+![==和equals](D:\Java\Aptech资料\JavaNotebook\Java基础\images\==和equals.png)
 
 - 变量定义 
 1. 先声明，后赋值

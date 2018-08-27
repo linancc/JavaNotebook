@@ -520,7 +520,7 @@ public class ArrayList<E> extends AbstractList<E>
    	setProperty(key,value)  设置键 - 值对
 
    	getProperty(key,value)  获取键 - 值对
-
+	
    	load(Reader) / load(InputStream) 加载文件流（读取文件）
 
    propertyNames()  返回所有键
@@ -535,3 +535,14 @@ public class ArrayList<E> extends AbstractList<E>
       1. reverse(List)  1qaQ	AZ
    4. shuffle(List)  混排（随机、没有顺序）
    5. addAll()  
+
+```java
+知识点：
+Collection接口存储一组不唯一（允许重复），无序的对象
+Set（集合）接口继承Collection接口，存储一组唯一（不允许重复），无序的对象
+List（队列）接口继承Collection接口，存储一组不唯一（允许重复），有序（以元素插入的次序来放置元素，不会重新排列）的对象
+Map接口存储一组成对的键—值对象，提供key（键）到value（值）的映射。Map中的key不要求有序，不允许重复，value同样不要求有序，但允许重复
+Iterator接口是负责定义访问和遍历元素的接口
+```
+
+![HashMap](D:\Java\Aptech资料\JavaNotebook\Java基础\images\HashMap.png)

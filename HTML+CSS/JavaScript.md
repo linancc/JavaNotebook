@@ -24,3 +24,30 @@
    }
    alert(person.id);
    ```
+
+Select下拉框onchange事件获取option的value值
+
+```html
+<select name="type" onchange="show_sub(this.options[this.options.selectedIndex].value)">    
+    <option value="0">请选择主菜名</option>    
+    <option value="1">白菜</option>    
+    <option value="2">萝卜</option>    
+ </select> 
+```
+
+js代码
+
+```javascript
+<script>     
+    function show_sub(v){     
+        alert(v);     
+    }     
+</script>  
+```
+
+最重要的知识点是获在select onchange时获取option的value值：
+
+```html
+this.options[this.options.selectedIndex].value
+```
+

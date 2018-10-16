@@ -1,6 +1,6 @@
 MySQL配置
 
-```
+```mysql
 my.ini文件  注意：MySql5.7文件在隐藏文件夹ProgramData中
 
 [mysql]
@@ -14,14 +14,14 @@ default-storage-engine=InnoDB/MYISAM  默认存储引擎
 
 查看xxx的设置
 
-```
+```mysql
 SHOW VARIABLES LIKE 'character_set_%'; 查看字符集的设置
 SHOW VARIABLES LIKE 'storage_engine%'; 查看默认存储引擎
 ```
 
 常用命令
 
-```
+```mysql
 FIND：找到 SELECT：查询 ALTER：修改 DESC：查看
 TRUNCATE 删表重建
 DELETE 删除数据行
@@ -30,7 +30,7 @@ HELP xx; 帮助信息
 \c 跳出执行
 ```
 
-```
+```mysql
 数据库模式定义语言DDL(Data Definition Language)
 数据操纵语言DML(Data Manipulation Language)
 数据查询语言DQL(Data Query Language)
@@ -38,7 +38,7 @@ HELP xx; 帮助信息
 
 创建表
 
-```
+```mysql
 DROP TABLE IF EXISTS 表名；
 CREATE TABLE 表名(
 #省略代码
@@ -47,7 +47,7 @@ CREATE TABLE 表名(
 
 查看表
 
-```
+```mysql
 SHOW TABLES;
 DESCRIBE 表名;
 DESC 表名;
@@ -55,13 +55,13 @@ DESC 表名;
 
 删除表
 
-```
+```mysql
 DROP TABLE IF EXISTS 表名;
 ```
 
 修改表
 
-```
+```mysql
 ALTER TABLE 旧表名 RENAME 新表名; 修改表名
 
 ALTER TABLE 表名 ADD 字段名 数据类型【属性】; 添加字段
@@ -75,7 +75,7 @@ ALTER TABLE 表名 CHANGE 原字段名 新字段名 数据类型【属性】; �
 
 DML插入数据
 
-```
+```mysql
 INSERT INTO 表名[(字段名列表)] VALUES (值列表)； 插入单行数据
 INSERT INTO 新表[(字段名列表)] VALUES (值列表1)，(值列表2)，。。。(值列表n)； 插入多行数据
 CREATE TABLE 新表(SELECT 字段1，字段2，。。FROM 原表)；将查询结果插入到新表
@@ -83,13 +83,13 @@ CREATE TABLE 新表(SELECT 字段1，字段2，。。FROM 原表)；将查询结
 
 DML更新数据
 
-```
+```mysql
 UPDATE 表名 SET 列名 = 更新值 [WHERE 更新条件]; 
 ```
 
 DML删除数据
 
-```
+```mysql
 DELETE [FROM] 表名 [WHERE <删除条件>];
 TRUNCATE TABLE student; 执行速度快，占用资源少，删除数据后表的标识列重新开始编号
 注意：删除所有行，功能上类似没有 WHERE 子句的 DELETE 语句；不建议使用，数据不能恢复还原
@@ -97,7 +97,7 @@ TRUNCATE TABLE student; 执行速度快，占用资源少，删除数据后表�
 
 DQL查询语句
 
-```
+```mysql
 SELECT <列名|表达式|函数|常量>
 FROM <表名>
 [WHERE<查询条件表达式>]   #可选的
@@ -112,3 +112,64 @@ SELECT firstName+‘.’+lastName AS 姓名 FROM employee;  查询中使用列�
 SELECT studentName FROM student WHERE email IS NULL; 查询空值
 ```
 
+高级查询
+
+EXISTS子查询
+
+```mysql
+DROP TABLE IF EXISTS temp;
+
+SELECT ... FROM 表名 WHERE EXISTS (子查询);
+```
+
+NOT EXISTS子查询
+
+
+
+子查询注意事项
+
+```mysql
+
+```
+
+
+
+分组查询
+
+使用GROUP BY进行分组查询
+
+
+
+多列分组查询
+
+
+
+使用HAVING子句进行分组筛选
+
+
+
+多表连接查询
+
+
+
+内连接查询
+
+
+
+外连接查询
+
+
+
+事务
+
+
+
+视图
+
+
+
+索引
+
+
+
+备份和恢复

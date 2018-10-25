@@ -110,7 +110,53 @@ SELECT studentNO，studentName,address FROM student WHERE adress ='河南新乡'
 SELECT firstName+‘.’+lastName AS 姓名 FROM employee;  查询中使用列的别名
 
 SELECT studentName FROM student WHERE email IS NULL; 查询空值
+
+SELECT studentName AS 姓名,address AS 地址,'北京新兴桥' AS 学校名称 FROM student;在查询中使用常量列
 ```
+
+常用函数
+
+1. 聚合函数
+
+   | 函数名  | 作用   |
+   | ------- | ------ |
+   | AVG()   | 平均值 |
+   | COUNT() | 行数   |
+   | MAX()   | 最大值 |
+   | MIN()   | 最小值 |
+   | SUM()   | 和     |
+
+2. 字符串函数
+
+   | 函数名                     | 作用                                                         | 举例                                                         |
+   | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+   | CONCAT(str1,str2,...,strn) | 连接字符串为一个完整的字符串                                 | SELECT CONCAT('My','S','QL');返回：MySQL                     |
+   | INSERT(str,pos,len,newstr) | 将字符串str从pos位置开始，len个字符长的子串替换为字符串newstr | SELECT INSERT('这是Oracle数据库',3,6,'MySQL数据库');返回：这是MySQL数据库 |
+   | LOWER(str)                 | 将字符串str中的所有字符变为小写                              | SELECT LOWER('MySQL');返回：mysql                            |
+   | UPPER(str)                 | 将字符串str中所有字符变为大写                                | SELECT UPPER('MySQL');返回：MYSQL                            |
+   | SUBSTRING(str,num,len)     | 返回字符串str的第num个位置开始长度为len的子字符串            | SELECT SUBSTRING('JavaMySQLOracle',5,5);                     |
+
+3. 时间日期函数
+
+   | 函数名                | 作用                               | 举例                              |
+   | --------------------- | ---------------------------------- | --------------------------------- |
+   | CURDATE()             | 获取当前日期                       | SELECT CURDATE();返回：2016-08-08 |
+   | CURTIME()             | 获取当前时间                       | SELECT CURTIME();返回：19:19:26   |
+   | NOW()                 | 获取当前日期和时间                 |                                   |
+   | WEEK(date)            | 获取日期date为一年中的第几周       |                                   |
+   | YEAR(date)            | 返回日期date的年份                 |                                   |
+   | HOUR(time)            | 返回时间time的小时值               |                                   |
+   | MINUTE(time)          | 返回时间time的分钟值               |                                   |
+   | DATEDIFF(date1,date2) | 返回日期date1和date2之间相隔的天数 |                                   |
+   | ADDDATE(date,n)       | 计算日期参数date加上n天后的日期    |                                   |
+
+4. 数学函数
+
+   | 函数名   | 作用                          | 举例                         |
+   | -------- | ----------------------------- | ---------------------------- |
+   | CEIL(x)  | 返回大于或等于数值x的最小整数 | SELECT CEIL(2.3);   返回：3  |
+   | FLOOR(x) | 返回小于或等于数值x的最大整数 | SELECT FLOOR(2.3);   返回：2 |
+   | RAND()   | 返回0-1之间的随机数           |                              |
 
 高级查询
 
@@ -123,14 +169,6 @@ SELECT ... FROM 表名 WHERE EXISTS (子查询);
 ```
 
 NOT EXISTS子查询
-
-
-
-子查询注意事项
-
-```mysql
-
-```
 
 
 
@@ -162,14 +200,47 @@ NOT EXISTS子查询
 
 事务
 
+```
+事务是一种机制、一个操作序列，它包含了一组数据库操作命令，并且把所有得命令作为一个整体一起向系统提交或撤销操作请求
 
+数据库事物具有如下特性（ACID）
+1.原子性
+2.一致性
+3.隔离性
+4.持久性
+
+使用下列语句来管理事务
+BEGIN 或 START TRANSACTION（开始事务）
+COMMIT（提交事务）
+ROLLBACK（回滚事务）
+或者使用SET autocommit=0 设置自动提交关闭，进行事务提交或回滚后，在使用SET autocommit=1 开启自动提交
+```
 
 视图
 
-
+```
+视图是一种查看数据库一个或多个表中数据的方法
+视图是一种虚拟表，通常作为执行查询的结果而创建的
+视图充当着查询中指定表的筛选器
+使用 CREATE VIEW 语句创建视图
+使用 SELECT 语句查看视图的查询结果
+```
 
 索引
 
-
+```
+建立索引有助于快速检索数据；索引分为普通索引、唯一索引、主键索引、复合索引、全文索引、空间索引
+```
 
 备份和恢复
+
+```
+常用的数据库备份和恢复方式使用 mysqldump 命令备份数据库
+使用 mysql 命令恢复数据库
+通过复制文件实现数据备份和恢复
+
+表数据的导出和导入
+使用 SELECT 。。。INTO OUTFILE 语句实现表数据的导出
+使用 LOAD DATA INFILE 。。。INTO 语句实现表数据的导入
+```
+

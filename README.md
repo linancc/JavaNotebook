@@ -1,4 +1,3 @@
-### 记录Java学习过程
 ### 学习资源整理
 
 [菜鸟教程](http://www.runoob.com/)

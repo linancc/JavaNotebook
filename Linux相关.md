@@ -13,6 +13,9 @@ sosreport
 head -n 10 某一文件的前十行
 tail -n 10 后十行
 diff 比较不同
+ps -aux ｜ grep xxx 是查看某个进程或者服务是否存在
+service 服务名 status 查看单个服务的运行状态： 
+service –status -all 查看所有服务的运行状态： 
 ```
 
 系统命令
@@ -84,3 +87,14 @@ usermod 修改用户属性
 passwd 用于修改用户密码、过期时间、认证信息等
 userdel 删除用户 -r	同时删除用户及用户家目录
 ```
+
+防火墙
+
+```
+firewall-cmd --zone=public --add-port=443/tcp --permanent  添加端口
+firewall-cmd --reload  重启生效
+```
+
+lnmp下mysql怎么设置远程连接访问
+
+![linux](D:\Java\Aptech资料\JavaNotebook\images\linux.png)

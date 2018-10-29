@@ -1,6 +1,6 @@
 ## 安装后配置
 
-![Tomcat配置](D:\Java\Aptech资料\JavaNotebook\images\tomcat.png)
+![Tomcat配置](..\images\tomcat.png)
 
 ## 默认 tomcat-user.xml 中的角色和用户配置示例如下：
 

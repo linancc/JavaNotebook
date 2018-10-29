@@ -160,7 +160,7 @@
     [jdk1.8新增日期类](https://juejin.im/post/5addc7a66fb9a07aa43bd2a0)
 
 13. Java的IO流分几种？有哪些常用类？
-    ![io流](D:\Java\Aptech资料\JavaNotebook\images\io流.png)
+    ![](http://www.runoob.com/wp-content/uploads/2013/12/iostream2xx.png)
 
 14. List和Set有什么区别？
 
@@ -177,7 +177,6 @@
 18. [Error和Exception有什么区别？](https://blog.csdn.net/goodlixueyong/article/details/47122487)
 
 19. CheckedException和UnCheckedException有什么区别？
-    ![异常](D:\Java\Aptech资料\JavaNotebook\images\异常.jpg)
 
 20. [Throw和throws有什么区别？](https://blog.csdn.net/luoweifu/article/details/10721543)
 

@@ -1,5 +1,3 @@
-]
-
 MySQL配置
 
 ```mysql

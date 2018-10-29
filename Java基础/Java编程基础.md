@@ -5,8 +5,6 @@
 
 ### DAY03
 
-![==和equals](D:\Java\Aptech资料\JavaNotebook\images\==和equals.png)
-
 - 变量定义 
 1. 先声明，后赋值
 2. 定义 = 声明 + 赋值

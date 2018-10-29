@@ -1,6 +1,6 @@
 ## 安装后配置
 
-![Tomcat配置](https://raw.githubusercontent.com/linancc/images/master/JavaNotebook_img/tomcat.png)
+![Tomcat配置](D:\Java\Aptech资料\JavaNotebook\images\tomcat.png)
 
 ## 默认 tomcat-user.xml 中的角色和用户配置示例如下：
 
@@ -14,7 +14,7 @@
 -->
 ```
 
-如果仅把上述内容去掉并修改密码，重启tomcat后访问http://localhost:8081/manager/html，会报403 Access Denied无法登录管理界面。
+如果仅把上述内容去掉并修改密码，重启tomcat后访问http://localhost:8080/manager/html，会报403 Access Denied无法登录管理界面。
 
 正确的配置如下：
 
@@ -27,8 +27,6 @@
 ```
 
 原因是tomcat8中定义了以下4种角色，所以配置文件中的角色名称是不能任意填写的。
-
-
 
 ## 关于配置Tomcat的URIEncoding
 
@@ -46,15 +44,16 @@ URIEncoding：This specifies the character encoding used to decode the URI bytes
 解决办法：
 修改Tomcat的Server.xml，在Connector标签中加上URLEncoding参数：
 
+```xml
 <Connector connectionTimeout="20000" port="8081" protocol="HTTP/1.1" redirectPort="8443" URIEncoding="UTF-8"/>
-
-
+```
 
 ## 配置tomcat端口为80
 
 server.xml 文件
-修改 <Connector port="80" protocol="HTTP/1.1"
-​               connectionTimeout="20000"
-​               redirectPort="8443" />
 
-
+```xml
+<Connector port="80" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+```

@@ -97,4 +97,11 @@ firewall-cmd --reload  重启生效
 
 lnmp下mysql怎么设置远程连接访问
 
-![linux](D:\Java\Aptech资料\JavaNotebook\images\linux.png)
+```mysql
+mysql - u root - p
+#输入mysql的root用户的密码
+mysql > use mysql ;
+mysql > update user set host = '%' where user = 'root' ;
+mysql > flush privileges ;
+mysql > exit ;
+```

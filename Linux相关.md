@@ -95,7 +95,7 @@ firewall-cmd --zone=public --add-port=443/tcp --permanent  添加端口
 firewall-cmd --reload  重启生效
 ```
 
-lnmp下mysql怎么设置远程连接访问
+[lnmp下mysql怎么设置远程连接访问](https://my.oschina.net/u/585378/blog/110478)
 
 ```mysql
 mysql - u root - p

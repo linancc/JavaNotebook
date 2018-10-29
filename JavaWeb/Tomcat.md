@@ -1,8 +1,6 @@
 ## 安装后配置
 
-![tomcat](D:\Java\Aptech资料\JavaNotebook\images\tomcat.png)
-
-
+![Tomcat配置](https://raw.githubusercontent.com/linancc/images/master/JavaNotebook_img/tomcat.png)
 
 ## 默认 tomcat-user.xml 中的角色和用户配置示例如下：
 

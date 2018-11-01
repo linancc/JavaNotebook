@@ -1,15 +1,23 @@
+[Mysql多表查询](https://www.cnblogs.com/smyhvae/p/4042303.html)
+
 MySQL配置
 
 ```mysql
 my.ini文件  注意：MySql5.7文件在隐藏文件夹ProgramData中
 
+#客户端默认字符集
 [mysql]
 default-character-set=utf8
 
+#服务器端默认字符集
 [mysqld]
 character-set-server=utf8
 
-default-storage-engine=InnoDB/MYISAM  默认存储引擎
+#客户端和服务器端的端口号
+port：3306
+
+#默认存储引擎
+default-storage-engine=InnoDB/MYISAM  
 ```
 
 查看xxx的设置
@@ -128,6 +136,24 @@ ALTER TABLE 表名 DROP 字段名; 删除字段
 ALTER TABLE 表名 CHANGE 原字段名 新字段名 数据类型【属性】; 修改字段
 ```
 
+InnoDB和MyISAM存储引擎比较
+
+|     功能     | InnoDB | MyISAM |
+| :----------: | :----: | :----: |
+|   支持事务   |  支持  | 不支持 |
+| 支持全文索引 | 不支持 |  支持  |
+|   外键约束   |  支持  | 不支持 |
+|  表空间大小  |  较大  |  较小  |
+|  数据行锁定  |  支持  | 不支持 |
+
+InnoDB和MyISAM各自的使用场合如下
+
+```
+InnoDB存储引擎，该存储引擎在事务处理上有优势，即支持具有提交、回滚和崩溃恢复能力的事务安装，所以占用更多的磁盘空间，因此需要进行频繁的更新、删除操作，同时还对事务的完整性要求较高，需要实现并发控制，适合使用该存储引擎
+
+MyISAM存储引擎，该存储引擎不支持事务，也不支持外键，访问速度比较快，因此对不需要进行事务处理，以访问为主的应用适合使用该引擎
+```
+
 DML插入数据
 
 ```mysql
@@ -167,6 +193,24 @@ SELECT firstName+‘.’+lastName AS 姓名 FROM employee;  查询中使用列�
 SELECT studentName FROM student WHERE email IS NULL; 查询空值
 
 SELECT studentName AS 姓名,address AS 地址,'北京新兴桥' AS 学校名称 FROM student;在查询中使用常量列
+
+DISTINCT 唯一数据【去除重复得数据】
+
+SELECT NOW(),SYSDATE(),CURDATE(),CURTIME()
+#dual是一张虚表
+#sysdate()/dual  ORACLE的
+SELECT NOW(),SYSDATE(),CURDATE(),CURTIME() FROM dual;
+```
+
+limit 限定数据行数 【top ten，分页】
+
+```
+LIMIT 4,4;从第五条记录开始显示四条数据，第一条记录位置是0；
+
+top ten：先排序，再获取限定数据
+MySQL: 
+SQL server:
+Oracle: order by
 ```
 
 常用函数
@@ -215,6 +259,26 @@ SELECT studentName AS 姓名,address AS 地址,'北京新兴桥' AS 学校名称
 
 高级查询
 
+子查询：
+
+```mysql
+1.概念
+	sql语句中嵌套sql语句：可以出现在sql语句的任何地方
+	可以操作的sql语句有：insert，update，delete，
+	子查询可以用在单表操作，也可以用在多表操作中
+	
+2.形式
+	1.select 后面
+	2.from 后面
+	3.where 后面
+	4.in
+	5.exists
+	6.insert
+
+```
+
+
+
 EXISTS子查询
 
 ```mysql
@@ -231,7 +295,11 @@ NOT EXISTS子查询
 
 使用GROUP BY进行分组查询
 
-
+```mysql
+SELECT subjectNo,AVG(studentResult) AS 课程平均成绩
+FROM result
+GROUP BY subjectNo;
+```
 
 多列分组查询
 
@@ -239,7 +307,11 @@ NOT EXISTS子查询
 
 使用HAVING子句进行分组筛选
 
-
+```
+having 分组条件
+1.一般情况下having可以替代where，复杂查询【同时存在】不能替代，不推荐
+2.having 仅限于针对分组得结果进行分组过滤，不能替代where
+```
 
 多表连接查询
 
@@ -252,6 +324,45 @@ NOT EXISTS子查询
 外连接查询
 
 
+
+
+
+
+
+数据库表之间的关系
+
+```
+1.分类
+	a.1对1关系
+		生活中：一夫一妻，一人一证
+    b.1对n关系
+    	生活中：1个老师：n个学生，一个老板：n个公司
+    c.m对n关系【相互的1：n的关系】
+    	生活中：1个老师：n个学生（1：n）；一个学生：n个老师（1：n）
+    	数据库：主外键关系；3张表；在第三张关联表中有多条数据与前两张表进行关联
+```
+
+查询
+
+```mysql
+#1.内连接（inner join）
+	select * from 主表 t1，附表t2 where t1.主键=t2.外键[条件];
+	select * from 主表 t1 [inner] join 附表 t2 on t1.主键=t2.外键[条件];
+	
+#2.左外部连接（left [outer] join）: 以主表为主，右表为辅；右表没有对应数据，为null
+	SELECT * FROM employee t1 LEFT OUTER JOIN salary t2 ON t1.id=t2.eid;
+	
+#3.右外部连接（right [outer] join）: 以右表为主，左表为辅，左表没有对应数据，为null
+	SELECT * FROM employee t1 RIGHT OUTER JOIN salary t2 ON t1.id=t2.eid;
+	
+#4.全连接（full [outer] join）：全连接没有主次关系，MySQL暂不支持
+	SELECT * FROM employee t1 FULL JOIN salary t2 ON t1.id=t2.eid;
+	
+#5.交叉表连接（cross join 笛卡尔集 2表数据连接）
+	SELECT * FROM 主表 t1 CROSS JOIN salary;
+	
+#6.关联连接（union多个查询结果的关联，列数相同,数据类型可以转化;查询结果堆积,查询）
+```
 
 事务
 

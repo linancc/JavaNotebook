@@ -1,3 +1,5 @@
+[Oracle安装](https://www.cnblogs.com/dmego/p/6353641.html)
+
 用户配置
 
 ```
@@ -7,3 +9,4 @@
 大数据用户 sh
 ```
 
+[Oracle服务](https://blog.csdn.net/u010028869/article/details/50069119)

@@ -204,7 +204,7 @@ SELECT NOW(),SYSDATE(),CURDATE(),CURTIME() FROM dual;
 
 limit 限定数据行数 【top ten，分页】
 
-```
+```mysql
 LIMIT 4,4;从第五条记录开始显示四条数据，第一条记录位置是0；
 
 top ten：先排序，再获取限定数据
@@ -274,10 +274,7 @@ Oracle: order by
 	4.in
 	5.exists
 	6.insert
-
 ```
-
-
 
 EXISTS子查询
 
@@ -332,14 +329,89 @@ having 分组条件
 数据库表之间的关系
 
 ```
+-- 数据库表之间的关系
+	
 1.分类
 	a.1对1关系
-		生活中：一夫一妻，一人一证
-    b.1对n关系
-    	生活中：1个老师：n个学生，一个老板：n个公司
-    c.m对n关系【相互的1：n的关系】
-    	生活中：1个老师：n个学生（1：n）；一个学生：n个老师（1：n）
-    	数据库：主外键关系；3张表；在第三张关联表中有多条数据与前两张表进行关联
+		生活中： 一夫一妻 (中国), 一人一证
+		数据库: 主外键关系; 2张表 ;从表中只有一条数据与主表对应
+	b.1对n关系
+		生活中：1个老师：n个学生，1个老板 ：n个公司
+		数据库：主外键关系;2张表; 从表中有多条数据与主表对应
+	c.m对n关系 [相互的1:n的关系]
+		生活中：1个老师：n个学生(1:n)；一个学生:n个老师(1:n)
+		数据库：主外键关系;3张表; 在第三张关联表中有多条数据与前2张表进行关联
+		
+2.查询(多表查询)
+	1.内连接（inner join）: 查询2个表公共的部分数据
+		规则：
+			select * from 主表 t1 , 附表 t2 where t1.主键 = t2.外键 [条件]
+			select * from 主表 t1 [inner] join 附表 t2  on  t1.主键 = t2.外键 [where 条件]
+		案例:
+			select t1.*, t2.* 
+			from employee t1, salary t2 
+			where t1.id = t2.eid
+			-----------------------------------------------
+			select t1.*, t2.* from employee t1, salary t2 
+			where t1.id = t2.eid and t2.base_salary >= 8000;
+			-----------------------------------------------
+			select t1.name,t1.age,t2.`month`, t2.base_salary,t2.more_salary 
+			from employee t1, salary t2 
+			where t1.id = t2.eid
+			------------------------------------------------
+			select * from employee t1 
+			INNER JOIN  salary t2 on t1.id = t2.eid;
+			
+			select * from employee t1 
+			JOIN  salary t2 on t1.id = t2.eid;
+			-------------------------------------------------
+			select t1.*, t2.* from employee t1 inner join salary t2  
+			on t1.id = t2.eid and t2.base_salary >= 8000;
+
+			select t1.*, t2.* from employee t1 inner join salary t2  
+			on t1.id = t2.eid 
+			where t2.base_salary >= 8000;
+	
+	2.左外部连接  (left [outer] join) : 以左表为主，右表为辅；右表没有对应数据，为NULL
+		规则：
+			select * from 主表 t1 left [outer] join 附表 t2  on  t1.主键 = t2.外键 [where 条件]
+		案例：
+			select * from employee t1 left outer join salary t2 on t1.id = t2.eid;
+			
+			select * from employee t1 
+			left outer join salary t2 on t1.id = t2.eid
+			where t2.more_salary >=6000;
+	3.右外部连接 (right [outer] join) : 以右表为主，左表为辅；左表没有对应数据，为NULL
+		规则：
+			select * from 主表 t1 right [outer] join 附表 t2  on  t1.主键 = t2.外键 [where 条件];	
+		案例：
+			select * from employee t1 right outer join salary t2 on t1.id = t2.eid;
+	
+	4.全连接 (full join) : 全连接没有主次关系, mysql暂不支持
+		规则：
+			select * from 主表 t1 full join 附表 t2  on  t1.主键 = t2.外键 [where 条件];	
+		案例：
+			select * from employee t1 full join salary t2 on t1.id = t2.eid;
+			(mysql执行全连接，会报错)
+	5.交叉表连接 (cross join 笛卡尔集 2表数据的乘法)
+		规则：
+			select * from 主表 t1 cross join 附表;
+		案例：
+			select * from employee cross join salary;
+	
+	6.关联连接 (union 多个查询结果的关联,列数相同，数据类型可以转化;查询结果堆积，查询语句之间可以没有任何逻辑关系)
+		规则：
+			select 列名1, 列名2 from  表1 
+			union
+			select 列名1, 列名2 from  表2
+			union
+			...			
+		案例：
+			select name from employee
+			union
+			select base_salary from salary
+			union
+			select name from dept;
 ```
 
 查询
@@ -382,6 +454,55 @@ ROLLBACK（回滚事务）
 或者使用SET autocommit=0 设置自动提交关闭，进行事务提交或回滚后，在使用SET autocommit=1 开启自动提交
 ```
 
+```mysql
+-- 数据库事务
+
+1.概念
+	事务是为了完成某一项工作或业务一组步骤的集合，
+	事务是要一个完整的整体，不能拆分开；
+	事务在数据库中的表现一组sql语句完成某项功能
+	现有的实时交易系统，必须使用事务处理，否则全部瘫痪。
+	事务一般分为单机事务，分布式事务
+2.特性 (ACID 原子一致，隔离持久)
+	
+	1.原子性（Atomicity）：	事务是一个整体，不能分隔。		
+	2.一致性（Consistency）：事务执行的结果只有2种：成功   失败
+		事务执行过程中不存在部分成功，或部分失败的情况。
+	3.隔离性（Isolation）：各个事务之间相互隔离，互不影响；	
+	4.持久性（Durability）：事务执行的结果可以永久保存到数据库或文件中
+		任何时候都可以查询事务执行的结果
+3.使用
+	1.mysql默认事务是开启的 （自动提交）
+	2.可以设置事务提交模式
+		SET autocommit  = 0;    # 关闭自动提交模式
+		SET autocommit  = 1;    # 开启自动提交模式
+	3.事务使用方式
+		开启事务：start transaction  或者  begin
+		提交事务： commit; (事务成功, 事务处理结果永久保存到数据库)
+		回滚事务： rollback; (事务失败,回滚到事务开始之前的状态)
+		
+		案例：
+			-- 事务成功
+			begin;
+				insert into test3(test2_id,name) values(99,'xx2');
+			commit;
+			
+			-- 事务失败
+			begin;
+				insert into test3(test2_id,name) values(121,'xx2');
+			rollback;
+
+			set autocommit = 0; -- 关闭自动提交
+			start transaction;
+				 insert into test3(test2_id,name) values(22,'22');
+				 insert into test4(age,name) values(22,'22'); 
+			rollback;
+			set autocommit = 1；-- 开启自动提交
+	4.事务只针对数据库中表数据的变更，不针对查询
+		事务： insert update delete
+		查询： 推荐不用使用事务
+```
+
 视图
 
 ```
@@ -392,6 +513,45 @@ ROLLBACK（回滚事务）
 使用 SELECT 语句查看视图的查询结果
 ```
 
+```
+-- 视图
+1.定义
+	视图是对现有表的一种投影，是一个虚拟的表。
+	可以按照表的操作来操作视图
+2.作用
+	1.简化代码，提高sql语句的可读性
+	2.隐藏现有的表结构，提高数据库的安全性
+	3.通过对视图的操作，映射到对表的操作
+	4.视图一般主要用于统计查询，也可以进行CRUD操作
+	
+3.语法
+	1.创建视图
+		规则：
+			create view 视图名  as (select 列的列表 from 表名 [where 条件]);
+			create view 视图名  as (单表查询/多表查询/子查询);
+		案例：
+			select id,name,sex,age from employee;
+			
+			create view employee_salary_view  as 
+			select t1.name,t1.sex,t1.age,t2.`month`,t2.base_salary,t2.more_salary 
+			from employee t1 left join salary t2 on t1.id = t2.eid;
+	2.修改视图
+		规则：
+			alter view 视图名 as (select 列的列表 from 表名 [where 条件]);
+		案例：
+			alter view employee_view2 as select id as aa,name as bb from employee;
+	3.删除视图
+		规则： 
+			drop view [if exists] 视图名;
+		案例：
+			drop view if exists employee_view2;
+	4.查看视图
+		规则：
+			show create view 视图名;
+		案例：
+			show create view employee_view;		
+```
+
 索引
 
 ```
@@ -400,7 +560,7 @@ ROLLBACK（回滚事务）
 
 备份和恢复
 
-```
+```mysql
 常用的数据库备份和恢复方式使用 mysqldump 命令备份数据库
 使用 mysql 命令恢复数据库
 通过复制文件实现数据备份和恢复
@@ -410,3 +570,194 @@ ROLLBACK（回滚事务）
 使用 LOAD DATA INFILE 。。。INTO 语句实现表数据的导入
 ```
 
+数据库备份
+
+```mysql
+1.概念
+	数据库备份为了确保数据的安全性，在出现异常情况下尽可能地快速恢复
+	备份一般分为：冷备，热备;本地备份，异地备份；全备份，增量备份...
+
+2.备份（mysql）
+	1.规则
+		mysqldump  -h 主机名 –u 用户名 –p   [options]   数据库名  
+		[ table1 table2 table3 ]   > path/filename.sql
+	2.案例
+		mysqldump -h 192.168.4.85 -u root -p raky  > d:/raky.sql
+		(一定在dos界面下直接运行[环境变量]，不能登陆mysql之后再运行)
+3.恢复(mysql)
+	1.规则
+		方式1:  SOURCE     /path/db_name.sql;
+		方式2:  mysql –u root –p  dbname  <  /path/db_name.sql;
+	2.案例
+		前提： 必须先创建数据库
+		方式1:  source  d:/raky.sql; (进入mysql的dos界面) 
+		方式2:  mysql -u root -p  raky  < d:/raky.sql (在dos界面下直接运行)
+ 
+4.数据的导入和导出
+	导出：
+		1.规则：
+			SELECT  * INTO  OUTFILE  'file_name' FROM  tbl_name;
+		2.案例：
+			select * into outfile 'd:/salary.txt' from salary;
+			(进入mysql的dos界面, 文本文件保存的是数据，不是sql语句)
+	导入：
+		1.规则：
+			LOAD DATA INFILE 'file_name ' INTO TABLE  tbl_name[FIELDS];
+		2.规则：
+			load data infile 'd:/salary.txt' into table salary;
+```
+
+游标和触发器
+
+```mysql
+1.游标
+	1.概念
+		也叫光标，相当于一个指针或引用，一次只能获取一条数据
+		相当于java中的迭代器，一般用在循环中，定位数据
+		游标一般不能单独使用，和存储过程结合在一起
+		游标是数据库系统用来供用户标志一条指定记录的指针，
+		它可以是变动的，但每次只指向一条记录 （迭代器）保存查询结果
+	2.使用
+		CREATE TABLE IF NOT EXISTS `store` (  
+		  `id` int(11) NOT NULL AUTO_INCREMENT,  
+		  `name` varchar(20) NOT NULL,  
+		  `count` int(11) NOT NULL DEFAULT '1',  
+		  PRIMARY KEY (`id`)  
+		)
+	
+		INSERT INTO `store` (`id`, `name`, `count`) VALUES  
+		(1, 'android', 15),  
+		(2, 'iphone', 14),  
+		(3, 'iphone', 20),  
+		(4, 'android', 5),  
+		(5, 'android', 13),  
+		(6, 'iphone', 13);  
+		
+		select name, sum(count) from store group by name;
+		
+		DROP PROCEDURE IF EXISTS report;
+		
+		CREATE PROCEDURE report(IN qname varchar(20))
+		BEGIN
+			-- 创建接收游标数据的变量
+			declare c_count int;
+			declare c_name varchar(20);
+			-- 创建总数变量
+			DECLARE total int DEFAULT 0;
+			-- 创建结束标志变量
+			DECLARE done int DEFAULT FALSE;
+			-- 创建游标
+			DECLARE cur CURSOR FOR select name, count from store where name = qname;
+			-- 指定游标循环结束时的返回值
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
+			-- 设置初始值
+			SET total = 0;	
+			-- 打开游标
+			OPEN cur;
+			-- 开始循环游标里的数据
+			read_loop:LOOP
+			-- 根据游标当前指向的一条数据
+			FETCH cur INTO c_name, c_count;
+			-- 判断游标的循环是否结束 
+			IF done THEN
+				LEAVE read_loop;
+			END IF;
+			-- 获取一条数据时，将count值进行累加操作
+			SET total = total + c_count;	
+			-- 结束游标循环
+			END LOOP;
+			-- 关闭游标  
+		  CLOSE cur; 
+			-- 输出结果
+			SELECT total;
+		END; 
+		
+		-- 调用存储过程
+		call report('iphone');
+		call report('android');
+
+2.触发器
+	1.概念
+		触发器是一种基于事件驱动的处理方式，是一种联动机制，连锁反应;
+		程序操作一条语句(表)，触发器会自动运行操作相关联表的数据
+		触发器一般用在引用完整性，主表的数据有变动，附表的数据随之自动变动
+		触发事件： insert , update , delete 
+		触发时机： before , after
+	2.使用
+		1.创建触发器
+			规则：
+				create trigger 触发器名 触发时机[before|after] 触发事件[insert|update|delete] ON 表名 FOR EACH ROW 
+				begin
+					stmt_sql语句;
+				end;
+			案例：
+				-- 创建2张具有主外键关系的表
+				use crm;
+				
+				create table raky1(
+					id int(11) not null auto_increment primary key,
+					name varchar(64) default null
+				);
+				
+				create table raky2(
+					id int(11) not null auto_increment primary key,
+					t1_id int(11) default null,
+					name varchar(64) default null
+				);
+				
+				-- 创建触发器
+				use crm;
+				create trigger insert_table after insert on raky1 for each row
+				begin
+					insert into raky2(t1_id,name)values(NEW.id, NEW.name);
+				end;
+				insert into raky1(name) value('raky');
+				
+				use crm;
+				create trigger update_table before update on raky1 for each row
+				begin
+					update raky2 set name = NEW.name where t1_id = OLD.id;
+				end;--
+				
+				update raky1 set name = '刘顺' where id=2;
+				
+				
+				use crm;
+				create trigger delete_table before delete on raky1 for each row
+				begin
+					delete from raky2 where t1_id = OLD.id;
+				end;--
+				
+				delete from raky1 where id = 2;				
+		
+		2.删除触发器
+			规则：
+				drop trigger if exists 触发器名;
+			案例:
+				drop trigger if exists update_table;
+```
+
+```mysql
+-- SQL 优化
+	a)索引优化
+	b)选择合适的列的数据类型,追加约束
+	c)尽可能使用NOT NULL
+	d)避免使用多表连接，join的字段要加索引
+	e)尽量不要用子查询
+	f)尽量在where子句中使用!=或<>操作符
+	g)慎用in 和 not in
+	h)尽量使用数字类型的字段
+	i)查询尽量避免使用*，写出需要查询的字段
+	j)like查询尽量以字符串开头的匹配使用索引
+
+索引优化：
+	1.经常查询选择条件的列
+	2.经常排序，分组的列
+	3.经常用作连接的列（主键和外键）
+	4.尽量避免*返回所有的列
+	5.索引列占用的字节数尽量小
+	6.索引列条件在其他条件之前
+	7.order by 中尽量不要使用表达式和函数
+	8.group by...having...尽量不要使用表达式和函数
+	9.定期优化索引 （根据业务需求）
+```

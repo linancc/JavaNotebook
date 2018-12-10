@@ -106,24 +106,16 @@
    5. 基本类型的包装类 （数字有关）
    
       1. 实现了缓存技术，在 [-128,127]进行缓存，超过阈值，缓存失效
-   
-   
       Byte Short  Character  Integer  Long 
       内部静态类：IntegerCache,LongCache
    
-   
       2. 没有实现缓存技术
-   
-   
       Float  Double
    
-   
       3. 案例：
-   
       Integer a = 12;  Integer b = 12;  a == b;   true
       Integer a = 212; Integer b = 212; a == b;   false
       Float a = 12F; Float b = 12F;  a == b;  false; 
-   
    ```
 
 9. 抽象类和接口有什么区别？

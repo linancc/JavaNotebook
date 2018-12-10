@@ -79,3 +79,47 @@ Data Access Object 数据访问对象，java操作数据库的代码
 ​	删除 delete()
 
 ​	查询 select()
+
+
+
+------
+
+### Java读取properties配置文件
+
+1. [几种读取properties的方式](https://blog.52itstyle.com/archives/879/)
+2. [大牛笔记：properties文件读取](http://www.daniubiji.cn/archives/357)
+
+```properties
+#db_config.properties
+jdbc.url=jdbc:mysql://localhost:3306/test?useSSL=false
+jdbc.username=root
+jdbc.password=123456
+jdbc.driver=com.mysql.jdbc.Driver
+```
+
+
+
+```java
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class ReadDemo {
+	public static void main(String[] args) throws FileNotFoundException {
+		Properties prop = new Properties();
+		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("db_config.properties");
+//		InputStream is = new FileInputStream(new File("db_config.peroperties"));
+		try {
+			prop.load(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(prop.getProperty("jdbc.url"));
+		System.out.println(prop.getProperty("jdbc.username"));
+		System.out.println(prop.getProperty("jdbc.password"));
+		System.out.println(prop.getProperty("jdbc.driver"));
+	}
+}
+```
+

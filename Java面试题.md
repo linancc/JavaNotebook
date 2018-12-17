@@ -227,3 +227,9 @@
     StringBuilder 类在 Java 5 中被提出，它和 StringBuffer 之间的最大不同在于 StringBuilder 的方法不是线程安全的（不能同步访问）。
     由于 StringBuilder 相较于 StringBuffer 有速度优势，所以多数情况下建议使用 StringBuilder 类。
     ```
+
+32. 判断用户是否已经登录的代码写在哪里？
+
+    ```
+    过滤器 拦截器
+    ```
